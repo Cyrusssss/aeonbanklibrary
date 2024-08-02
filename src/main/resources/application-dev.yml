@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/aeonbanklibrary
+    username: root
+    password: cyrus
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  data:
+    mongodb:
+      host: javaspringbootcluster.cjomxj7.mongodb.net
+      port: mongodb+srv://cyrus:<password>@javaspringbootcluster.cjomxj7.mongodb.net/?retryWrites=true&w=majority&appName=JavaSpringBootCluster
+      database: JavaSpringBootCluster
+      username: cyrus
+      password: cyrus
+  redis:
+    database: 0
+    host: 172.20.18.39
+    port: 6379
+    password:
+    timeout: 10000
+    connect-timeout: 10000
+  rabbitmq:
+    addresses: amqp://172.20.18.39:5672
+    virtual-host: javaspringboot
+    username: cyrus
+    password: cyrus

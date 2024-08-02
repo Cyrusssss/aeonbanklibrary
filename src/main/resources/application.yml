@@ -1,0 +1,41 @@
+server:
+  port: 8055
+
+spring:
+  application:
+    name: library
+  profiles:
+    active: @env@
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: true
+
+logging:
+  path: ./log
+  config: classpath:logback-spring.xml
+  file:
+    max-history: 100
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG
+    com:
+      aeonbank:
+        library:
+          controller: DEBUG
+          queue: DEBUG
+          repository: INFO
+          service: DEBUG
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: FULL
+    auto-mapping-unknown-column-behavior: FAILING
+
+rest:
+  readTimeout: 30000
+  connectTimeout: 5000

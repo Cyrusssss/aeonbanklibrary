@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false">
+
+    <springProperty scope="context" name="LOG_FILE" source="logging.path"/>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- default console appender (without color console printing) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>[${appName}] %d{yyyy-MM-dd HH:mm:ss.SSS} %X{traceId} [%thread] %-5level %class{0}:%line - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- console appender for spring profile 'develop' (with color console printing) -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <Pattern>[${appName}] %highlight(%yellow(%d{yyyy-MM-dd HH:mm:ss.SSS})) %X{traceId} [%thread] %highlight(%-5level %class{0}:%line) - %msg%n</Pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{traceId} [%thread] %-5level %class{0}:%line - %msg%n</Pattern>
+            <charset>utf8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}/aeonbank-library-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 50MB -->
+            <maxFileSize>1000MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <!-- keep 30 days' worth of history -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
