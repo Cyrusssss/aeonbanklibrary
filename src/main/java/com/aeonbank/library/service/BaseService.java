@@ -1,6 +1,6 @@
 package com.aeonbank.library.service;
 
-import com.aeonbank.library.common.util.ObjectMapperUtil;
+import com.aeonbank.library.common.ObjectMapperUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BaseService {

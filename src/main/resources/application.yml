@@ -1,5 +1,5 @@
 server:
-  port: 8055
+  port: 8080
 
 spring:
   application:
@@ -16,19 +16,7 @@ logging:
   config: classpath:logback-spring.xml
   file:
     max-history: 100
-  level:
-    org:
-      springframework:
-        web:
-          client:
-            RestTemplate: DEBUG
-    com:
-      aeonbank:
-        library:
-          controller: DEBUG
-          queue: DEBUG
-          repository: INFO
-          service: DEBUG
+
 
 mybatis:
   configuration:
@@ -36,6 +24,8 @@ mybatis:
     auto-mapping-behavior: FULL
     auto-mapping-unknown-column-behavior: FAILING
 
+
 rest:
   readTimeout: 30000
-  connectTimeout: 5000
+  connectTimeout: 30000
+

@@ -1,6 +1,7 @@
 package com.aeonbank.library.model;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data

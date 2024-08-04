@@ -5,8 +5,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Borrower extends User {
+public class Borrower extends Audit {
 
-    private String apiKeyCode;
+    private String name;
+    private String email;
 
 }
