@@ -6,6 +6,7 @@ create table book (
     isbn varchar(13) not null,
     title varchar(100) not null,
     author varchar(100) not null,
+    is_borrowed tinyint(1) not null default 0,
     created_by varchar(100) default 'system',
     created_date datetime default current_timestamp,
     updated_by varchar(100),
@@ -28,3 +29,29 @@ create table borrower (
 );
 create index idx_name on borrower(name);
 create index idx_email on borrower(email);
+
+drop table if exists `transaction`;
+create table `transaction` (
+    book_id bigint not null,
+    borrower_id bigint not null,
+    is_returned tinyint(1) not null default 0,
+    created_by varchar(100) default 'system',
+    created_date datetime default current_timestamp,
+    updated_by varchar(100),
+    updated_date datetime on update current_timestamp
+);
+create index idx_book_id on `transaction`(book_id);
+create index idx_borrower_id on `transaction`(borrower_id);
+
+drop table if exists transaction_archive;
+create table transaction_archive (
+    book_id bigint not null,
+    borrower_id bigint not null,
+    is_returned tinyint(1) not null default 0,
+    created_by varchar(100) default 'system',
+    created_date datetime default current_timestamp,
+    updated_by varchar(100),
+    updated_date datetime on update current_timestamp
+);
+create index idx_book_id on transaction_archive(book_id);
+create index idx_borrower_id on transaction_archive(borrower_id);

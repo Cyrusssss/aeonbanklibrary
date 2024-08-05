@@ -107,8 +107,6 @@
 			<version>2.2</version>
 		</dependency>
 
-
-
 	</dependencies>
 
 	<build>
@@ -137,6 +135,12 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+		</profile>
+		<profile>
+			<id>prd</id>
+			<properties>
+				<env>prd</env>
+			</properties>
 		</profile>
 	</profiles>
 

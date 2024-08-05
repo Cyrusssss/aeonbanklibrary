@@ -7,4 +7,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BookServiceRequest extends Book {
+
+    private Long bookId;
+    private Long borrowerId;
+
 }

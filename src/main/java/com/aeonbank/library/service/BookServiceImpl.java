@@ -4,7 +4,9 @@ import com.aeonbank.library.common.Enums;
 import com.aeonbank.library.dto.BaseRequestResponse;
 import com.aeonbank.library.dto.BookServiceRequest;
 import com.aeonbank.library.model.Book;
+import com.aeonbank.library.model.Transaction;
 import com.aeonbank.library.repository.BookRepository;
+import com.aeonbank.library.repository.TransactionRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Date;
+
 @Slf4j
 @Service
 public class BookServiceImpl extends BaseService implements BookService<BaseRequestResponse<BookServiceRequest>> {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     private ISBNValidator isbnValidator;
 
@@ -124,11 +131,28 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
             }
             rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
 
-            // prepare to insert
-            Book book = new Book();
-            book.setIsbn(rr.getRequest().getIsbn());
-            book.setTitle(rr.getRequest().getTitle());
-            book.setAuthor(rr.getRequest().getAuthor());
+            // check if book with same isbn exist
+            Book book = bookRepository.getByIsbn(rr.getRequest().getIsbn());
+            if (book != null) {
+                if (!book.getTitle().equals(rr.getRequest().getTitle())) {
+                    log.error("[add]book with same isbn exist but input Title not tally. inputTitle:{} existingBookTitle:{}", rr.getRequest().getTitle(), book.getTitle());
+                    rr.setDetail("book with same isbn exist but input Title not tally with book Title in database");
+                    rr.setStatus(Enums.Status.DATA_NOT_TALLY);
+                    break tryBlock;
+                }
+                else if (!book.getAuthor().equals(rr.getRequest().getAuthor())) {
+                    log.error("[add]book with same isbn exist but input Author not tally. inputAuthor:{} existingBookAuthor:{}", rr.getRequest().getAuthor(), book.getAuthor());
+                    rr.setDetail("book with same isbn exist but input Author not tally with book Author in database");
+                    rr.setStatus(Enums.Status.DATA_NOT_TALLY);
+                    break tryBlock;
+                }
+            } else {
+                book = new Book();
+                book.setIsbn(rr.getRequest().getIsbn());
+                book.setTitle(rr.getRequest().getTitle());
+                book.setAuthor(rr.getRequest().getAuthor());
+            }
+            book.setIsBorrowed(0);
 
             // insert
             int insertCount = bookRepository.add(book);
@@ -197,6 +221,11 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
                 rr.setDetail("input Author cannot be null or blank");
                 break tryBlock;
             }
+            else if (rr.getRequest().getIsBorrowed() == null || rr.getRequest().getIsBorrowed() < 0 || rr.getRequest().getIsBorrowed() > 1) {
+                log.error("[update]input isBorrowed cannot be null, and must be 0/1 only");
+                rr.setDetail("input isBorrowed cannot be null, and must be 0/1 only");
+                break tryBlock;
+            }
             rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
 
             // get record for update
@@ -211,6 +240,7 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
             book.setIsbn(rr.getRequest().getIsbn());
             book.setAuthor(rr.getRequest().getAuthor());
             book.setTitle(rr.getRequest().getTitle());
+            book.setIsBorrowed(rr.getRequest().getIsBorrowed());
 
             // update
             int rowsAffected = bookRepository.update(book);
@@ -261,7 +291,16 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
             }
             rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
 
-            // update
+            // get book
+            Book book = bookRepository.getForUpdate(rr.getRequest().getId());
+            if (book.getIsBorrowed() != 0) {
+                log.info("[borrowBook]book is borrowed, delete is not possible. isBorrowed:{}", book.getIsBorrowed());
+                rr.setDetail("book is borrowed, delete is not possible");
+                rr.setStatus(Enums.Status.BOOK_IS_NOT_AVAILABLE);
+                break tryBlock;
+            }
+
+            // delete
             int rowsAffected = bookRepository.delete(rr.getRequest().getId());
             if (rowsAffected != 1) {
                 log.error("[delete]failed to delete book, rowsAffected is not 1. rowsAffected:{}", rowsAffected);
@@ -283,6 +322,146 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         log.info("[delete]end of request");
+    }
+
+    @Override
+    @Transactional
+    public void borrowBook(BaseRequestResponse<BookServiceRequest> rr) {
+        log.info("[borrowBook]request received");
+        tryBlock: try {
+            // validation
+            if (rr == null) {
+                log.error("[borrowBook]input object cannot be null");
+                rr = new BaseRequestResponse<>();
+                rr.setDetail("[backend error]input object cannot be null");
+                break tryBlock;
+            }
+            else if (rr.getRequest() == null) {
+                log.error("[borrowBook]request cannot be null");
+                rr.setDetail("[backend error]request cannot be null");
+                break tryBlock;
+            }
+            rr.setStatus(Enums.Status.INVALID_INPUT);
+            if (rr.getRequest().getId() == null || rr.getRequest().getId() < 1) {
+                log.error("[borrowBook]input Id cannot be null less than 1");
+                rr.setDetail("input Id cannot be null less than 1");
+                break tryBlock;
+            }
+            else if (rr.getRequest().getBorrowerId() == null || rr.getRequest().getBorrowerId() < 1) {
+                log.error("[borrowBook]borrowerId cannot be null less than 1");
+                rr.setDetail("input borrowerId cannot be null less than 1");
+                break tryBlock;
+            }
+            rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
+
+            // update book
+            Book book = bookRepository.getForUpdate(rr.getRequest().getId());
+            if (book.getIsBorrowed() != 0) {
+                log.info("[borrowBook]book is not available to be borrowed. isBorrowed:{}", book.getIsBorrowed());
+                rr.setDetail("book is not available to be borrowed");
+                rr.setStatus(Enums.Status.BOOK_IS_NOT_AVAILABLE);
+                break tryBlock;
+            }
+            book.setIsBorrowed(1);
+            bookRepository.update(book);
+
+            // insert transaction
+            Transaction transaction = new Transaction();
+            transaction.setBookId(book.getId());
+            transaction.setBorrowerId(rr.getRequest().getBorrowerId());
+            int insertCount = transactionRepository.insert(transaction);
+            if (insertCount != 1) {
+                log.info("[borrowBook]fail to create a new transaction to borrow the book");
+                rr.setDetail("fail to create transaction");
+                break tryBlock;
+            }
+
+            // set status to success
+            rr.setStatus(Enums.Status.SUCCESS);
+        } catch (Exception e) {
+            log.error("[borrowBook]something went wrong. error >>> ", e);
+        }
+        // set a new rr if rr is null
+        if (rr == null) {
+            rr = new BaseRequestResponse<>();
+        }
+        // rollback transaction if status is not success
+        if (rr.getCode() == null || !rr.getCode().equals(Enums.Status.SUCCESS.getCode())) {
+            log.error("[borrowBook]rolling back transaction");
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        log.info("[borrowBook]end of request");
+    }
+
+    @Override
+    @Transactional
+    public void returnBook(BaseRequestResponse<BookServiceRequest> rr) {
+        log.info("[returnBook]request received");
+        tryBlock: try {
+            // validation
+            if (rr == null) {
+                log.error("[returnBook]input object cannot be null");
+                rr = new BaseRequestResponse<>();
+                rr.setDetail("[backend error]input object cannot be null");
+                break tryBlock;
+            }
+            else if (rr.getRequest() == null) {
+                log.error("[returnBook]request cannot be null");
+                rr.setDetail("[backend error]request cannot be null");
+                break tryBlock;
+            }
+            rr.setStatus(Enums.Status.INVALID_INPUT);
+            if (rr.getRequest().getId() == null || rr.getRequest().getId() < 1) {
+                log.error("[returnBook]input Id cannot be null less than 1");
+                rr.setDetail("input Id cannot be null less than 1");
+                break tryBlock;
+            }
+            rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
+
+            // return book
+            Book book = bookRepository.getForUpdate(rr.getRequest().getId());
+            if (book.getIsBorrowed() != 1) {
+                log.info("[borrowBook]book is not borrowed, return is not possible. isBorrowed:{}", book.getIsBorrowed());
+                rr.setDetail("book is not borrowed, return is not possible");
+                rr.setStatus(Enums.Status.BOOK_IS_NOT_AVAILABLE);
+                break tryBlock;
+            }
+            book.setIsBorrowed(0);
+            bookRepository.update(book);
+
+            // get transaction for update
+            Transaction transaction = transactionRepository.getByBookIdAndBorrowerId(rr.getRequest().getBookId(), rr.getRequest().getBorrowerId());
+            if (transaction == null) {
+                log.info("[borrowBook]transaction not found, return is not possible");
+                rr.setDetail("transaction not found, return is not possible");
+                rr.setStatus(Enums.Status.TRANSACTION_NOT_FOUND);
+                break tryBlock;
+            }
+            transaction.setReturnDate(new Date());
+
+            // update transaction
+            int updateCount = transactionRepository.updateReturnDate(transaction);
+            if (updateCount != 1) {
+                log.info("[borrowBook]update failed. updateCount:{}", updateCount);
+                rr.setDetail("transaction update failed");
+                break tryBlock;
+            }
+
+            // set status to success
+            rr.setStatus(Enums.Status.SUCCESS);
+        } catch (Exception e) {
+            log.error("[returnBook]something went wrong. error >>> ", e);
+        }
+        // set a new rr if rr is null
+        if (rr == null) {
+            rr = new BaseRequestResponse<>();
+        }
+        // rollback transaction if status is not success
+        if (rr.getCode() == null || !rr.getCode().equals(Enums.Status.SUCCESS.getCode())) {
+            log.error("[returnBook]rolling back transaction");
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        log.info("[returnBook]end of request");
     }
 
 }

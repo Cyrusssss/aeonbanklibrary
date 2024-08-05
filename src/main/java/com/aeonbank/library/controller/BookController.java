@@ -22,7 +22,10 @@ public class BookController {
     @GetMapping("/api/v1/book")
     public ResponseEntity<Object> list(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize
+            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author
     ) {
         long timeNow = new Date().getTime();
         log.info("[list]request received. pageNo:{} pageSize:{}", pageNo, pageSize);
@@ -31,6 +34,9 @@ public class BookController {
             rr.getPagination().setPageNo(pageNo);
             rr.getPagination().setPageSize(pageSize);
             BookServiceRequest request = new BookServiceRequest();
+            request.setIsbn(isbn);
+            request.setTitle(title);
+            request.setAuthor(author);
             rr.setRequest(request);
             bookService.list(rr);
         } catch (Exception e) {
@@ -106,18 +112,37 @@ public class BookController {
         return ResponseEntity.ok().body(rr);
     }
 
-    @PostMapping("/api/v1/book/{id}/borrow")
-    public ResponseEntity<Object> add(@RequestBody BookServiceRequest request) {
+    @PostMapping("/api/v1/book/{id}/borrow-book")
+    public ResponseEntity<Object> borrowBook(@PathVariable("id") Long id,
+                                             @RequestBody BookServiceRequest request) {
         long timeNow = new Date().getTime();
-        log.info("[add]request received. request:{}", request);
+        log.info("[borrowBook]request received. id:{} request:{}", id, request);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
+            request.setBookId(id);
             rr.setRequest(request);
-            bookService.add(rr);
+            bookService.borrowBook(rr);
         } catch (Exception e) {
-            log.error("[add]something went wrong. error >>> ", e);
+            log.error("[borrowBook]something went wrong. error >>> ", e);
         }
-        log.info("[add]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
+        log.info("[borrowBook]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
+        return ResponseEntity.ok().body(rr);
+    }
+
+    @PostMapping("/api/v1/book/{id}/return-book")
+    public ResponseEntity<Object> returnBook(@PathVariable("id") Long id) {
+        long timeNow = new Date().getTime();
+        log.info("[returnBook]request received. id:{}", id);
+        BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
+        try {
+            BookServiceRequest request = new BookServiceRequest();
+            request.setId(id);
+            rr.setRequest(request);
+            bookService.returnBook(rr);
+        } catch (Exception e) {
+            log.error("[returnBook]something went wrong. error >>> ", e);
+        }
+        log.info("[returnBook]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 

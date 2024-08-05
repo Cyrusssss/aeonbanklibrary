@@ -10,5 +10,6 @@ public class Book extends Audit {
     private String isbn;
     private String title;
     private String author;
+    private Integer isBorrowed;
 
 }

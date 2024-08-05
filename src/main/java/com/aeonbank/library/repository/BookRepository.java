@@ -21,6 +21,13 @@ public interface BookRepository {
             """)
     Book get(Long id);
 
+    @Select("""
+            select *
+             from book
+             where isbn = #{isbn}
+            """)
+    Book getByIsbn(String isbn);
+
     @Insert("""
             insert into book(isbn, title, author)
              values(#{isbn}, #{title}, #{author})
