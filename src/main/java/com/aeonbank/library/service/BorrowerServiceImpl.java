@@ -112,7 +112,7 @@ public class BorrowerServiceImpl extends BaseService implements BorrowerService<
                 rr.setDetail("input Email cannot be null or blank");
                 break tryBlock;
             }
-            else if (emailValidator.isValid(rr.getRequest().getEmail())) {
+            else if (!emailValidator.isValid(rr.getRequest().getEmail())) {
                 log.error("[add]input Email is not a valid email");
                 rr.setDetail("input Email is not a valid email");
                 break tryBlock;
@@ -181,7 +181,7 @@ public class BorrowerServiceImpl extends BaseService implements BorrowerService<
                 rr.setDetail("input Email cannot be null or blank");
                 break tryBlock;
             }
-            else if (emailValidator.isValid(rr.getRequest().getEmail())) {
+            else if (!emailValidator.isValid(rr.getRequest().getEmail())) {
                 log.error("[update]input Email is not a valid email");
                 rr.setDetail("input Email is not a valid email");
                 break tryBlock;

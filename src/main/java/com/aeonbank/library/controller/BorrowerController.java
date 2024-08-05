@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 import static com.aeonbank.library.common.Enums.DEFAULT_PAGE_SIZE;
 
 @Slf4j
@@ -17,11 +19,12 @@ public class BorrowerController {
     @Autowired
     private BorrowerService<BaseRequestResponse<BorrowerServiceRequest>> borrowerService;
 
-    @GetMapping("/api/v1/borrower/list")
+    @GetMapping("/api/v1/borrower")
     public ResponseEntity<Object> list(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize
     ) {
+        long timeNow = new Date().getTime();
         log.info("[list]request received. pageNo:{} pageSize:{}", pageNo, pageSize);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -33,12 +36,13 @@ public class BorrowerController {
         } catch (Exception e) {
             log.error("[list]something went wrong. error >>> ", e);
         }
-        log.info("[list]end of request");
+        log.info("[list]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @GetMapping("/api/v1/borrower/get")
-    public ResponseEntity<Object> get(@RequestParam Long id) {
+    @GetMapping("/api/v1/borrower/{id}")
+    public ResponseEntity<Object> get(@PathVariable("id") Long id) {
+        long timeNow = new Date().getTime();
         log.info("[get]request received. id:{}", id);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -49,12 +53,13 @@ public class BorrowerController {
         } catch (Exception e) {
             log.error("[get]something went wrong. error >>> ", e);
         }
-        log.info("[get]end of request");
+        log.info("[get]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @PostMapping("/api/v1/borrower/add")
+    @PostMapping("/api/v1/borrower")
     public ResponseEntity<Object> add(@RequestBody BorrowerServiceRequest request) {
+        long timeNow = new Date().getTime();
         log.info("[add]request received. request:{}", request);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -63,35 +68,41 @@ public class BorrowerController {
         } catch (Exception e) {
             log.error("[add]something went wrong. error >>> ", e);
         }
-        log.info("[add]end of request");
+        log.info("[add]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @PutMapping("/api/v1/borrower/update")
-    public ResponseEntity<Object> update(@RequestBody BorrowerServiceRequest request) {
-        log.info("[update]request received. request:{}", request);
+    @PutMapping("/api/v1/borrower/{id}")
+    public ResponseEntity<Object> update(@PathVariable("id") Long id,
+                                         @RequestBody BorrowerServiceRequest request) {
+        long timeNow = new Date().getTime();
+        log.info("[update]request received. id:{} request:{}", id, request);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
         try {
+            request.setId(id);
             rr.setRequest(request);
             borrowerService.update(rr);
         } catch (Exception e) {
             log.error("[update]something went wrong. error >>> ", e);
         }
-        log.info("[update]end of request");
+        log.info("[update]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @DeleteMapping("/api/v1/borrower/update")
-    public ResponseEntity<Object> delete(@RequestBody BorrowerServiceRequest request) {
-        log.info("[delete]request received. request:{}", request);
+    @DeleteMapping("/api/v1/borrower/{id}")
+    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
+        long timeNow = new Date().getTime();
+        log.info("[delete]request received. id:{}", id);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
         try {
+            BorrowerServiceRequest request = new BorrowerServiceRequest();
+            request.setId(id);
             rr.setRequest(request);
             borrowerService.delete(rr);
         } catch (Exception e) {
             log.error("[delete]something went wrong. error >>> ", e);
         }
-        log.info("[delete]end of request");
+        log.info("[delete]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 

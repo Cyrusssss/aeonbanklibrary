@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 import static com.aeonbank.library.common.Enums.DEFAULT_PAGE_SIZE;
 
 @Slf4j
@@ -17,11 +19,12 @@ public class BookController {
     @Autowired
     private BookService<BaseRequestResponse<BookServiceRequest>> bookService;
 
-    @GetMapping("/api/v1/book/list")
+    @GetMapping("/api/v1/book")
     public ResponseEntity<Object> list(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize
     ) {
+        long timeNow = new Date().getTime();
         log.info("[list]request received. pageNo:{} pageSize:{}", pageNo, pageSize);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -33,12 +36,13 @@ public class BookController {
         } catch (Exception e) {
             log.error("[list]something went wrong. error >>> ", e);
         }
-        log.info("[list]end of request");
+        log.info("[list]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @GetMapping("/api/v1/book/get")
-    public ResponseEntity<Object> get(@RequestParam Long id) {
+    @GetMapping("/api/v1/book/{id}")
+    public ResponseEntity<Object> get(@PathVariable("id") Long id) {
+        long timeNow = new Date().getTime();
         log.info("[get]request received. id:{}", id);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -49,12 +53,13 @@ public class BookController {
         } catch (Exception e) {
             log.error("[get]something went wrong. error >>> ", e);
         }
-        log.info("[get]end of request");
+        log.info("[get]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @PostMapping("/api/v1/book/add")
+    @PostMapping("/api/v1/book")
     public ResponseEntity<Object> add(@RequestBody BookServiceRequest request) {
+        long timeNow = new Date().getTime();
         log.info("[add]request received. request:{}", request);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
@@ -63,35 +68,56 @@ public class BookController {
         } catch (Exception e) {
             log.error("[add]something went wrong. error >>> ", e);
         }
-        log.info("[add]end of request");
+        log.info("[add]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @PutMapping("/api/v1/book/update")
-    public ResponseEntity<Object> update(@RequestBody BookServiceRequest request) {
-        log.info("[update]request received. request:{}", request);
+    @PutMapping("/api/v1/book/{id}")
+    public ResponseEntity<Object> update(@PathVariable("id") Long id,
+                                         @RequestBody BookServiceRequest request) {
+        long timeNow = new Date().getTime();
+        log.info("[update]request received. id:{} request:{}", id, request);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
+            request.setId(id);
             rr.setRequest(request);
             bookService.update(rr);
         } catch (Exception e) {
             log.error("[update]something went wrong. error >>> ", e);
         }
-        log.info("[update]end of request");
+        log.info("[update]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 
-    @DeleteMapping("/api/v1/book/update")
-    public ResponseEntity<Object> delete(@RequestBody BookServiceRequest request) {
-        log.info("[delete]request received. request:{}", request);
+    @DeleteMapping("/api/v1/book/{id}")
+    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
+        long timeNow = new Date().getTime();
+        log.info("[delete]request received. id:{}", id);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
         try {
+            BookServiceRequest request = new BookServiceRequest();
+            request.setId(id);
             rr.setRequest(request);
             bookService.delete(rr);
         } catch (Exception e) {
             log.error("[delete]something went wrong. error >>> ", e);
         }
-        log.info("[delete]end of request");
+        log.info("[delete]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
+        return ResponseEntity.ok().body(rr);
+    }
+
+    @PostMapping("/api/v1/book/{id}/borrow")
+    public ResponseEntity<Object> add(@RequestBody BookServiceRequest request) {
+        long timeNow = new Date().getTime();
+        log.info("[add]request received. request:{}", request);
+        BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
+        try {
+            rr.setRequest(request);
+            bookService.add(rr);
+        } catch (Exception e) {
+            log.error("[add]something went wrong. error >>> ", e);
+        }
+        log.info("[add]end of request. timeConsumed:{}ms", new Date().getTime() - timeNow);
         return ResponseEntity.ok().body(rr);
     }
 

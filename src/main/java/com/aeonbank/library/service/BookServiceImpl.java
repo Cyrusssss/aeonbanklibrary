@@ -107,7 +107,7 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
                 rr.setDetail("input ISBN cannot be null or blank");
                 break tryBlock;
             }
-            else if (isbnValidator.isValid(rr.getRequest().getIsbn())) {
+            else if (!isbnValidator.isValid(rr.getRequest().getIsbn())) {
                 log.error("[add]input ISBN is not a valid ISBN");
                 rr.setDetail("input ISBN is not a valid ISBN");
                 break tryBlock;
@@ -182,7 +182,7 @@ public class BookServiceImpl extends BaseService implements BookService<BaseRequ
                 rr.setDetail("input ISBN cannot be null or blank");
                 break tryBlock;
             }
-            else if (isbnValidator.isValid(rr.getRequest().getIsbn())) {
+            else if (!isbnValidator.isValid(rr.getRequest().getIsbn())) {
                 log.error("[update]input ISBN is not a valid ISBN");
                 rr.setDetail("input ISBN is not a valid ISBN");
                 break tryBlock;
