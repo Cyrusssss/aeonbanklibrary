@@ -50,7 +50,7 @@ This project is a backend service to provide library functionality via Restful A
 
 ## API documentation
 
-Spring Doc Swagger documentation is available at `/swagger-ui/index.html` but with limited information due to system design, the request data object information is missing.
+Spring Doc Swagger documentation is available at `/swagger-ui/index.html` but with limited information due to system design, the response data information is missing.
 
 #### Response Body
 
@@ -60,21 +60,21 @@ API response body format is fixed, which contain response data object, and statu
 
 - Object with following fields
 
-| Field | Type | Desc |
-| - | - | - |
-| request | Object | contain request input data |
-| data | Object | the response data, can be anything: List/Object/etc |
-| code | String | status code - to indicate if the request is processed successfully or not |
-| message | String | status message |
-| detail | String | status details |
-| pagination | Object | contain pagination info, typically used when requesting data list |
+| Field      | Type   | Desc                                                                      |
+|------------|--------|---------------------------------------------------------------------------|
+| request    | Object | contain request input data                                                |
+| data       | Object | the response data, can be anything: List/Object/etc                       |
+| code       | String | status code - to indicate if the request is processed successfully or not |
+| message    | String | status message                                                            |
+| detail     | String | status details                                                            |
+| pagination | Object | contain pagination info, typically used when requesting data list         |
 
 **Sample Response Body:**
 
 ```json
 {
-    "request": <Request Data Object>,
-    "data": <Can be Anything>,
+    "request": "<Request Data Object>",
+    "data": "<Can be Anything>",
     "code": "000000",
     "message": "Operation success",
     "pagination": {
@@ -88,16 +88,16 @@ API response body format is fixed, which contain response data object, and statu
 
 - Any code other than `000000` mean the request is failed.
 
-| Code | Message | Desc |
-| - | - | - |
-| 000000 | Operation success | Request successfully processed |
-| 999999 | Something went wrong | Typically caused by system exception |
-| 999998 | Invalid input | Input data is invalid |
-| 999997 | Data not found | Unable to get the respective data in db to process the request |
-| 999996 | Book is not available | Book is borrowed and unable to be borrowed again |
+| Code   | Message               | Desc                                                                                                                                                                                     |
+|--------|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 000000 | Operation success     | Request successfully processed                                                                                                                                                           |
+| 999999 | Something went wrong  | Typically caused by system exception                                                                                                                                                     |
+| 999998 | Invalid input         | Input data is invalid                                                                                                                                                                    |
+| 999997 | Data not found        | Unable to get the respective data in db to process the request                                                                                                                           |
+| 999996 | Book is not available | Book is borrowed and unable to be borrowed again                                                                                                                                         |
 | 999995 | Transaction not found | Every book-borrowing will create a transaction in db. When returning a book, we need to mark the transaction as completed. This error is due to the respective transaction is not found. |
-| 999994 | Data not tally | Book with same ISBN must have same Title and Author. This error indicate user trying to insert a same book to the system without same Title and Author. |
-| 999993 | Book not returned | Book is currently borrowed. |
+| 999994 | Data not tally        | Book with same ISBN must have same Title and Author. This error indicate user trying to insert a same book to the system without same Title and Author.                                  |
+| 999993 | Book not returned     | Book is currently borrowed                                                                                                                                                               |
 
 ### Book API
 
@@ -111,17 +111,17 @@ API response body format is fixed, which contain response data object, and statu
 
 - List of objects, with following fields
 
-| Field | Type |
-| - | - |
-| id | Long |
-| isbn | String |
-| title | String |
-| author | String |
-| borrowerId | Long |
-| createdBy | String |
-| createdDate | Date |
-| updatedBy | String |
-| updatedDate | Date |
+| Field       | Type   |
+|-------------|--------|
+| id          | Long   |
+| isbn        | String |
+| title       | String |
+| author      | String |
+| borrowerId  | Long   |
+| createdBy   | String |
+| createdDate | Date   |
+| updatedBy   | String |
+| updatedDate | Date   |
 
 **Sample Response:**
 
@@ -157,25 +157,25 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of book |
+| Field | Type | Desc       |
+|-------|------|------------|
+| id    | Long | id of book |
 
 **Response Data and Type:**
 
 - Object, with following fields
 
-| Field | Type |
-| - | - |
-| id | Long |
-| isbn | String |
-| title | String |
-| author | String |
-| borrowerId | Long |
-| createdBy | String |
-| createdDate | Date |
-| updatedBy | String |
-| updatedDate | Date |
+| Field       | Type   |
+|-------------|--------|
+| id          | Long   |
+| isbn        | String |
+| title       | String |
+| author      | String |
+| borrowerId  | Long   |
+| createdBy   | String |
+| createdDate | Date   |
+| updatedBy   | String |
+| updatedDate | Date   |
 
 **Sample Response:**
 
@@ -208,11 +208,11 @@ API response body format is fixed, which contain response data object, and statu
 
 **Request Data Fields and Type:**
 
-| Field | Type | Mandatory |
-| - | - | - |
-| isbn | String | true |
-| title | String | true |
-| author | String | true |
+| Field  | Type   | Mandatory |
+|--------|--------|-----------|
+| isbn   | String | true      |
+| title  | String | true      |
+| author | String | true      |
 
 **Sample Request:**
 
@@ -251,18 +251,18 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of book |
+| Field | Type | Desc       |
+|-------|------|------------|
+| id    | Long | id of book |
 
 **Request Data Fields and Type:**
 
-| Field | Type | Mandatory | Note |
-| - | - | - | - |
-| isbn | String | true |  |
-| title | String | true |  |
-| author | String | true |  |
-| borrowerId | Long | false | if book is borrowed but null value passed in, book will be returned. |
+| Field      | Type   | Mandatory | Note                                                                |
+|------------|--------|-----------|---------------------------------------------------------------------|
+| isbn       | String | true      |                                                                     |
+| title      | String | true      |                                                                     |
+| author     | String | true      |                                                                     |
+| borrowerId | Long   | false     | if book is borrowed but null value passed in, book will be returned |
 
 **Sample Request:**
 
@@ -304,9 +304,9 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of book |
+| Field | Type | Desc       |
+|-------|------|------------|
+| id    | Long | id of book |
 
 **Response Data Fields and Type:**
 
@@ -333,15 +333,15 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of book |
+| Field | Type | Desc       |
+|-------|------|------------|
+| id    | Long | id of book |
 
 **Request Data Fields and Type:**
 
-| Field | Type | Mandatory |
-| - | - | - |
-| borrowerId | Long | true |
+| Field      | Type | Mandatory |
+|------------|------|-----------|
+| borrowerId | Long | true      |
 
 **Sample Request:**
 
@@ -377,9 +377,9 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of book |
+| Field | Type | Desc       |
+|-------|------|------------|
+| id    | Long | id of book |
 
 **Response Data Fields and Type:**
 
@@ -410,15 +410,15 @@ API response body format is fixed, which contain response data object, and statu
 
 - List of objects, with following fields
 
-| Field | Type |
-| - | - |
-| id | Long |
-| name | String |
-| email | String |
-| createdBy | String |
-| createdDate | Date |
-| updatedBy | String |
-| updatedDate | Date |
+| Field       | Type   |
+|-------------|--------|
+| id          | Long   |
+| name        | String |
+| email       | String |
+| createdBy   | String |
+| createdDate | Date   |
+| updatedBy   | String |
+| updatedDate | Date   |
 
 **Sample Response:**
 
@@ -450,23 +450,23 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of borrower |
+| Field | Type | Desc           |
+|-------|------|----------------|
+| id    | Long | id of borrower |
 
 **Response Data and Type:**
 
 - Object, with following fields
 
-| Field | Type |
-| - | - |
-| id | Long |
-| name | String |
-| email | String |
-| createdBy | String |
-| createdDate | Date |
-| updatedBy | String |
-| updatedDate | Date |
+| Field       | Type   |
+|-------------|--------|
+| id          | Long   |
+| name        | String |
+| email       | String |
+| createdBy   | String |
+| createdDate | Date   |
+| updatedBy   | String |
+| updatedDate | Date   |
 
 **Sample Response:**
 
@@ -496,10 +496,10 @@ API response body format is fixed, which contain response data object, and statu
 
 **Request Data Fields and Type:**
 
-| Field | Type | Mandatory |
-| - | - | - |
-| name | String | true |
-| email | String | true |
+| Field | Type   | Mandatory |
+|-------|--------|-----------|
+| name  | String | true      |
+| email | String | true      |
 
 **Sample Request:**
 
@@ -536,16 +536,16 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of borrower |
+| Field | Type | Desc           |
+|-------|------|----------------|
+| id    | Long | id of borrower |
 
 **Request Data Fields and Type:**
 
-| Field | Type | Mandatory |
-| - | - | - |
-| name | String | true |
-| email | String | true |
+| Field | Type   | Mandatory |
+|-------|--------|-----------|
+| name  | String | true      |
+| email | String | true      |
 
 **Sample Request:**
 
@@ -583,9 +583,9 @@ API response body format is fixed, which contain response data object, and statu
 
 **URL Path Variable:**
 
-| Field | Type | Desc |
-| - | - | - |
-| id | Long | id of borrower |
+| Field | Type | Desc           |
+|-------|------|----------------|
+| id    | Long | id of borrower |
 
 **Response Data Fields and Type:**
 
