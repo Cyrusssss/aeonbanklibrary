@@ -6,7 +6,7 @@ ENV TZ=Asia/Kuala_Lumpur
 
 EXPOSE 8080
 
-RUN mkdir /myapp/logs
+RUN mkdir -p /myapp/logs
 
 WORKDIR /myapp
 
