@@ -1,27 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/aeonbanklibrary
+    url: jdbc:mysql://aeonbanklibrary.c9qm6semu9r3.ap-southeast-1.rds.amazonaws.com:3306/aeonbanklibrary
     username: cyrus
-    password: cyrus
+    password: Cyrus12345
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-  data:
-    mongodb:
-      host: 172.20.18.39
-      port: 27017
-      database: aeonbanklibrary
-      #username:
-      #password:
-  redis:
-    database: 0
-    host: 172.20.18.39
-    port: 6379
-    #password:
-  rabbitmq:
-    addresses: amqp://172.20.18.39:5672
-    virtual-host: aeonbanklibrary
-    username: cyrus
-    password: cyrus
 
 
 logging:

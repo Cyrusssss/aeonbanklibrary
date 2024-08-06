@@ -12,7 +12,7 @@ RUN chown root /app
 
 WORKDIR /app
 
-COPY target/*.jar ./app.jar
+COPY target/*.jar app.jar
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
