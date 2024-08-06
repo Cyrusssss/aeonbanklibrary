@@ -31,19 +31,24 @@ public class TransactionHousekeep {
             // select id from transaction where is_returned = 1 for update;
             List<Long> idList = transRepository.getReturnedId();
             if (idList.isEmpty()) {
-                log.info("[housekeep]nothing to housekeep, request ignored");
+                log.info("[housekeep]nothing to housekeep, job ignored");
                 success = true;
                 break tryBlock;
             }
 
             // insert into transaction_archive (select * from transaction where id in ?)
-            int insertedCount = transArchiveRepository.insertTrans(idList);
-            if (insertedCount != idList.size()) {
-                log.error("[housekeep]insertedCount not tally with idList");
+            int affectedCount = transArchiveRepository.insertTrans(idList);
+            if (affectedCount != idList.size()) {
+                log.error("[housekeep]insertedCount not tally with idList. insertedCount:{} idList.size:{}", affectedCount, idList.size());
                 break tryBlock;
             }
 
             // delete from transaction where id in ?
+            affectedCount = transRepository.deleteByIds(idList);
+            if (affectedCount != idList.size()) {
+                log.error("[housekeep]deletedCount not tally with idList. deletedCount:{} idList.size:{}", affectedCount, idList.size());
+                break tryBlock;
+            }
 
             success = true;
             log.info("[housekeep]cron job executed successfully");

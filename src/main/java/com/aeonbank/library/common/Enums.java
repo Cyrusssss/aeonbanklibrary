@@ -15,6 +15,7 @@ public class Enums {
         BOOK_IS_NOT_AVAILABLE("999996", "Book is not available"),
         TRANSACTION_NOT_FOUND("999995", "Transaction not found"),
         DATA_NOT_TALLY("999994", "Data not tally"),
+        BOOK_NOT_RETURNED("999993", "Book not returned"),
         SUCCESS("000000", "Operation success");
 
         private final String code;

@@ -5,6 +5,7 @@ import com.aeonbank.library.dto.BaseRequestResponse;
 import com.aeonbank.library.dto.BorrowerServiceRequest;
 import com.aeonbank.library.model.Borrower;
 import com.aeonbank.library.repository.BorrowerRepository;
+import com.aeonbank.library.repository.TransactionRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,9 @@ public class BorrowerServiceImpl extends BaseService implements BorrowerService<
 
     @Autowired
     private BorrowerRepository borrowerRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     private EmailValidator emailValidator;
 
@@ -249,7 +253,25 @@ public class BorrowerServiceImpl extends BaseService implements BorrowerService<
             }
             rr.setStatus(Enums.Status.SOMETHING_WENT_WRONG);
 
-            // update
+            // check if borrower exist
+            Borrower borrower = borrowerRepository.getForUpdate(rr.getRequest().getId());
+            if (borrower == null) {
+                log.error("[delete]borrower not found");
+                rr.setDetail("borrower not found, delete is not possible");
+                rr.setStatus(Enums.Status.DATA_NOT_FOUND);
+                break tryBlock;
+            }
+
+            // check if borrower have unreturned book
+            int unreturnedCount = transactionRepository.getUnreturnedCountByBorrowerId(borrower.getId());
+            if (unreturnedCount > 0) {
+                log.error("[delete]book not returned, unable to delete borrower. unreturnedCount:{}", unreturnedCount);
+                rr.setDetail("book not returned, unable to delete borrower");
+                rr.setStatus(Enums.Status.BOOK_NOT_RETURNED);
+                break tryBlock;
+            }
+
+            // delete
             int rowsAffected = borrowerRepository.delete(rr.getRequest().getId());
             if (rowsAffected != 1) {
                 log.error("[delete]failed to delete borrower, rowsAffected is not 1. rowsAffected:{}", rowsAffected);

@@ -1,18 +1,16 @@
 package com.aeonbank.library.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 @Data
-public class Transaction {
+@EqualsAndHashCode(callSuper = true)
+public class Transaction extends Audit {
 
     private Long bookId;
     private Long borrowerId;
     private Date returnDate;
-    private String createdBy;
-    private Date createdDate;
-    private String updatedBy;
-    private Date updatedDate;
 
 }

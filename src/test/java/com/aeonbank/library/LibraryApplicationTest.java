@@ -6,28 +6,36 @@ import org.apache.commons.validator.routines.ISBNValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @SpringBootTest
 public class LibraryApplicationTest {
-
-    @Test
-    public void test() {
-        log.debug("test");
-    }
 
     @Test
     public void testGenerateIsbn() {
         Faker faker = new Faker();
         ISBNValidator validator = new ISBNValidator();
 
-        String isbn10 = faker.code().isbn10();
-        String isbn13 = faker.code().isbn13();
+        List<String> isbn10List = new ArrayList<>();
+        while (isbn10List.size() < 10) {
+            String isbn10 = faker.code().isbn10();
+            if (validator.isValidISBN10(isbn10)) {
+                isbn10List.add(isbn10);
+            }
+        }
 
-        log.info("Generated ISBN-10: {}", isbn10);
-        log.info("Is ISBN-10 valid: " + validator.isValidISBN10(isbn10));
+        List<String> isbn13List = new ArrayList<>();
+        while (isbn13List.size() < 10) {
+            String isbn13 = faker.code().isbn13();
+            if (validator.isValidISBN13(isbn13)) {
+                isbn13List.add(isbn13);
+            }
+        }
 
-        log.info("Generated ISBN-13: {}", isbn13);
-        log.info("Is ISBN-13 valid: {}", validator.isValidISBN13(isbn13));
+        log.info("[testGenerateIsbn]isbn10List >>> {}", isbn10List);
+        log.info("[testGenerateIsbn]isbn13List >>> {}", isbn13List);
     }
 
 }

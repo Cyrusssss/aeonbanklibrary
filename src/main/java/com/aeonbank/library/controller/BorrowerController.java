@@ -20,7 +20,7 @@ public class BorrowerController {
     private BorrowerService<BaseRequestResponse<BorrowerServiceRequest>> borrowerService;
 
     @GetMapping("/api/v1/borrower")
-    public ResponseEntity<Object> list(
+    public ResponseEntity<BaseRequestResponse<BorrowerServiceRequest>> list(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize
     ) {
@@ -41,7 +41,7 @@ public class BorrowerController {
     }
 
     @GetMapping("/api/v1/borrower/{id}")
-    public ResponseEntity<Object> get(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseRequestResponse<BorrowerServiceRequest>> get(@PathVariable("id") Long id) {
         long timeNow = new Date().getTime();
         log.info("[get]request received. id:{}", id);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
@@ -58,7 +58,7 @@ public class BorrowerController {
     }
 
     @PostMapping("/api/v1/borrower")
-    public ResponseEntity<Object> add(@RequestBody BorrowerServiceRequest request) {
+    public ResponseEntity<BaseRequestResponse<BorrowerServiceRequest>> add(@RequestBody BorrowerServiceRequest request) {
         long timeNow = new Date().getTime();
         log.info("[add]request received. request:{}", request);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();
@@ -73,7 +73,7 @@ public class BorrowerController {
     }
 
     @PutMapping("/api/v1/borrower/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") Long id,
+    public ResponseEntity<BaseRequestResponse<BorrowerServiceRequest>> update(@PathVariable("id") Long id,
                                          @RequestBody BorrowerServiceRequest request) {
         long timeNow = new Date().getTime();
         log.info("[update]request received. id:{} request:{}", id, request);
@@ -90,7 +90,7 @@ public class BorrowerController {
     }
 
     @DeleteMapping("/api/v1/borrower/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseRequestResponse<BorrowerServiceRequest>> delete(@PathVariable("id") Long id) {
         long timeNow = new Date().getTime();
         log.info("[delete]request received. id:{}", id);
         BaseRequestResponse<BorrowerServiceRequest> rr = new BaseRequestResponse<>();

@@ -39,7 +39,8 @@ public interface BookRepository {
             update book set
              isbn = #{isbn},
              title = #{title},
-             author = #{author}
+             author = #{author},
+             borrower_id = #{borrowerId}
              where id = #{id}
             """)
     int update(Book book);

@@ -28,13 +28,13 @@ public interface TransactionRepository {
 
     @Insert("""
             insert into `transaction`(book_id, borrower_id)
-             values(#{book_id}, #{borrower_id})
+             values(#{bookId}, #{borrowerId})
             """)
     int insert(Transaction transaction);
 
     @Update("""
             update `transaction` set
-             return_date = #{return_date}
+             return_date = #{returnDate}
              where id = #{id}
             """)
     int updateReturnDate(Transaction transaction);
@@ -42,12 +42,20 @@ public interface TransactionRepository {
     @Select("""
             select *
              from `transaction`
-             where book_id = #{book_id}
-             and borrower_id = #{borrower_id}
+             where book_id = #{bookId}
              and return_date is null
              limit 1
              for update
             """)
-    Transaction getByBookIdAndBorrowerId(Long bookId, Long borrowerId);
+    Transaction getByBookIdNotReturnedForUpdate(Long bookId);
+
+    @Select("""
+            select count(*) CNT
+             from `transaction`
+             where borrower_id = #{borrowerId}
+             and return_date is null
+            """)
+    @SelectKey(statement="", keyProperty="CNT", before=false, resultType=int.class)
+    int getUnreturnedCountByBorrowerId(Long borrowerId);
 
 }

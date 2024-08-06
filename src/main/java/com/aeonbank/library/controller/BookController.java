@@ -20,7 +20,7 @@ public class BookController {
     private BookService<BaseRequestResponse<BookServiceRequest>> bookService;
 
     @GetMapping("/api/v1/book")
-    public ResponseEntity<Object> list(
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> list(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize,
             @RequestParam(required = false) String isbn,
@@ -47,7 +47,7 @@ public class BookController {
     }
 
     @GetMapping("/api/v1/book/{id}")
-    public ResponseEntity<Object> get(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> get(@PathVariable("id") Long id) {
         long timeNow = new Date().getTime();
         log.info("[get]request received. id:{}", id);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
@@ -64,7 +64,7 @@ public class BookController {
     }
 
     @PostMapping("/api/v1/book")
-    public ResponseEntity<Object> add(@RequestBody BookServiceRequest request) {
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> add(@RequestBody BookServiceRequest request) {
         long timeNow = new Date().getTime();
         log.info("[add]request received. request:{}", request);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
@@ -79,7 +79,7 @@ public class BookController {
     }
 
     @PutMapping("/api/v1/book/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") Long id,
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> update(@PathVariable("id") Long id,
                                          @RequestBody BookServiceRequest request) {
         long timeNow = new Date().getTime();
         log.info("[update]request received. id:{} request:{}", id, request);
@@ -96,7 +96,7 @@ public class BookController {
     }
 
     @DeleteMapping("/api/v1/book/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> delete(@PathVariable("id") Long id) {
         long timeNow = new Date().getTime();
         log.info("[delete]request received. id:{}", id);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
@@ -113,7 +113,7 @@ public class BookController {
     }
 
     @PostMapping("/api/v1/book/{id}/borrow-book")
-    public ResponseEntity<Object> borrowBook(@PathVariable("id") Long id,
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> borrowBook(@PathVariable("id") Long id,
                                              @RequestBody BookServiceRequest request) {
         long timeNow = new Date().getTime();
         log.info("[borrowBook]request received. id:{} request:{}", id, request);
@@ -130,7 +130,7 @@ public class BookController {
     }
 
     @PostMapping("/api/v1/book/{id}/return-book")
-    public ResponseEntity<Object> returnBook(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseRequestResponse<BookServiceRequest>> returnBook(@PathVariable("id") Long id) {
         long timeNow = new Date().getTime();
         log.info("[returnBook]request received. id:{}", id);
         BaseRequestResponse<BookServiceRequest> rr = new BaseRequestResponse<>();
