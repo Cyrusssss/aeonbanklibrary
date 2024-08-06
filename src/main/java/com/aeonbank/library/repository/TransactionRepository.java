@@ -1,6 +1,5 @@
 package com.aeonbank.library.repository;
 
-import com.aeonbank.library.model.Book;
 import com.aeonbank.library.model.Transaction;
 import org.apache.ibatis.annotations.*;
 
