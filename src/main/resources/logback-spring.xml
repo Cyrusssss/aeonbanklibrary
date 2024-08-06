@@ -25,7 +25,7 @@
             <charset>utf8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>yoo-crawler-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/yoo-crawler-%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
