@@ -39,6 +39,8 @@ This project is a backend service to provide library functionality via Restful A
    - `-Pdev` mean build the app using profile `dev`, you may change to `prd` or any other available profiles.
 2. `docker build -t aeonbanklibrary-app .`
    - build the project as docker image
+3. `docker save -o aeonbanklibrary-app.tar aeonbanklibrary-app:latest`
+   - now you have the docker image .tar file, which can used to do deployment, for example upload to AWS ECR.
 
 ## How to run in localhost
 1. `docker rm -f aeonbanklibrary-container`
