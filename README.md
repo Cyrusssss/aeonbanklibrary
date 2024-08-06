@@ -8,7 +8,8 @@ This project is a backend service to provide library functionality via Restful A
    * [How to build](#how-to-build)
    * [How to run in localhost](#how-to-run-in-localhost)
    * [API documentation](#api-documentation)
-      - [Response Body](#response-body)
+      - [API HTTP Response Code](#api-http-response-code)
+      - [API Response](#api-response)
       - [Response Status Code](#response-status-code)
       + [Book API](#book-api)
          - [1. list](#1-list)
@@ -52,7 +53,13 @@ This project is a backend service to provide library functionality via Restful A
 
 Spring Doc Swagger documentation is available at `/swagger-ui/index.html` but with limited information due to system design, the response data information is missing.
 
-#### Response Body
+#### API HTTP Response Code
+
+API response with HTTP status code other than `200` is a failed request.
+
+If the error or any failing is interpreted at code logic level, it will always respond with HTTP status code `200`, meanwhile error details will be given in **response body**, kindly refer to next section on this.
+
+#### API Response
 
 API response body format is fixed, which contain response data object, and status information.
 
