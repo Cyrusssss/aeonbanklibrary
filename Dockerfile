@@ -6,11 +6,12 @@ ENV TZ=Asia/Kuala_Lumpur
 
 EXPOSE 8080
 
-RUN mkdir /app
+RUN mkdir /appdir
+RUN mkdir /appdir/log
 
-RUN chown root /app
+RUN chown -R root /appdir
 
-WORKDIR /app
+WORKDIR /appdir
 
 COPY target/*.jar app.jar
 
