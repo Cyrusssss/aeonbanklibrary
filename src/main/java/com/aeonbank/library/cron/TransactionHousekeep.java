@@ -21,9 +21,9 @@ public class TransactionHousekeep {
     @Autowired
     private TransactionArchiveRepository transArchiveRepository;
 
-    //@Scheduled(cron = "0 0 0 * * ?") // everyday 12am
-    @Scheduled(cron = "0 */5 * * * ?") // every 5 minutes
+    // every X minutes
     @Transactional
+    @Scheduled(cron = "0 */1 * * * ?")
     public void housekeep() {
         log.info("[housekeep]cron job started");
         boolean success = false;

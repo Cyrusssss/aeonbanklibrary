@@ -18,13 +18,13 @@ public interface TransactionRepository {
     List<Long> getReturnedId();
 
     @Delete("""
+            <script>
             delete from `transaction`
              where id in
-             <foreach item="id" collection="idList" open="(" close=")" separator=",">
-            #{id}
-            </foreach>
+             <foreach item='item' collection='list' open='(' separator=',' close=')'>#{item}</foreach>
+            </script>
             """)
-    int deleteByIds(List<Long> idList);
+    int deleteByIds(@Param("list") List<Long> ids);
 
     @Insert("""
             insert into `transaction`(book_id, borrower_id)

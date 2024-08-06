@@ -1,9 +1,8 @@
 package com.aeonbank.library.repository;
 
-import com.aeonbank.library.model.Book;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,15 +10,15 @@ import java.util.List;
 public interface TransactionArchiveRepository {
 
     @Insert("""
+            <script>
             insert into transaction_archive (
             select *
              from `transaction`
              where id in
-             <foreach item="id" collection="idList" open="(" close=")" separator=",">
-            #{id}
-            </foreach>
+             <foreach item='item' collection='list' open='(' separator=',' close=')'>#{item}</foreach>
             )
+            </script>
             """)
-    int insertTrans(List<Long> idList);
+    int insertTrans(@Param("list") List<Long> ids);
 
 }
