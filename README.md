@@ -3,7 +3,31 @@
 
 This project is a backend service to provide library functionality via Restful API as follows.
 
-[TOC]
+- [Library System](#library-system)
+   * [Prerequisite](#prerequisite)
+   * [How to build](#how-to-build)
+   * [How to run in localhost](#how-to-run-in-localhost)
+   * [API documentation](#api-documentation)
+      + [API Response](#api-response)
+         - [Response Body](#response-body)
+         - [Response Status Code](#response-status-code)
+      + [Book API](#book-api)
+         - [1. list](#1-list)
+         - [2. get](#2-get)
+         - [3. add](#3-add)
+         - [4. update](#4-update)
+         - [5. delete](#5-delete)
+         - [6. borrow book](#6-borrow-book)
+         - [7. return book](#7-return-book)
+      + [Borrower API](#borrower-api)
+         - [1. list](#1-list-1)
+         - [2. get](#2-get-1)
+         - [3. add](#3-add-1)
+         - [4. update](#4-update-1)
+         - [5. delete](#5-delete-1)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Prerequisite
 
