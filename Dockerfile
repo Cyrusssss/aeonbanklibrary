@@ -6,11 +6,7 @@ ENV TZ=Asia/Kuala_Lumpur
 
 EXPOSE 8080
 
-RUN mkdir /myapp
-RUN mkdir /myapp/log
-
-RUN chown -R root /myapp
-RUN chmod -R 777 /myapp
+RUN mkdir /myapp/logs
 
 WORKDIR /myapp
 
