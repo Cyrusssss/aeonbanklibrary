@@ -18,6 +18,7 @@ spring:
 logging:
   config: classpath:logback-spring.xml
   file:
+    path: ./logs
     max-history: 100
 
 
