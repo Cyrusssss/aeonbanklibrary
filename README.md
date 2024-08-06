@@ -32,7 +32,7 @@ This project is a backend service to provide library functionality via Restful A
 2. Mysql 8.0 Server
    - Kindly refer to `db` folder in project root directory to init the database and tables
 3. Docker
-   - to build docker image
+   - to build docker image or run the image as container locally
 
 ## How to build
 
@@ -49,11 +49,11 @@ This project is a backend service to provide library functionality via Restful A
 
 ## API documentation
 
-### API Response
-
-Our API reponse format is fixed, which contain reponse data object, and status information.
+Spring Doc Swagger documentation is available at `/swagger-ui/index.html` but with limited information due to system design, the request data object information is missing.
 
 #### Response Body
+
+API response body format is fixed, which contain response data object, and status information.
 
 **Response Data and Type:**
 
@@ -102,9 +102,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 1. list
 
-**URL:** `/api/v1/book`
-
 **Http Method:** `GET`
+
+**URL:** `/api/v1/book`
 
 **Response Data and Type:**
 
@@ -150,9 +150,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 2. get
 
-**URL:** `/api/v1/book/<id>`
-
 **Http Method:** `GET`
+
+**URL:** `/api/v1/book/<id>`
 
 **URL Path Variable:**
 
@@ -201,9 +201,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 3. add
 
-**URL:** `/api/v1/book`
-
 **Http Method:** `POST`
+
+**URL:** `/api/v1/book`
 
 **Request Data Fields and Type:**
 
@@ -244,9 +244,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 4. update
 
-**URL:** `/api/v1/book/<id>`
-
 **Http Method:** `PUT`
+
+**URL:** `/api/v1/book/<id>`
 
 **URL Path Variable:**
 
@@ -401,9 +401,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 1. list
 
-**URL:** `/api/v1/borrower`
-
 **Http Method:** `GET`
+
+**URL:** `/api/v1/borrower`
 
 **Response Data and Type:**
 
@@ -443,9 +443,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 2. get
 
-**URL:** `/api/v1/borrower/<id>`
-
 **Http Method:** `GET`
+
+**URL:** `/api/v1/borrower/<id>`
 
 **URL Path Variable:**
 
@@ -489,9 +489,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 3. add
 
-**URL:** `/api/v1/borrower`
-
 **Http Method:** `POST`
+
+**URL:** `/api/v1/borrower`
 
 **Request Data Fields and Type:**
 
@@ -529,9 +529,9 @@ Our API reponse format is fixed, which contain reponse data object, and status i
 
 #### 4. update
 
-**URL:** `/api/v1/borrower/<id>`
-
 **Http Method:** `PUT`
+
+**URL:** `/api/v1/borrower/<id>`
 
 **URL Path Variable:**
 
