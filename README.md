@@ -26,9 +26,6 @@ This project is a backend service to provide library functionality via Restful A
          - [4. update](#4-update-1)
          - [5. delete](#5-delete-1)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
 ## Prerequisite
 
 1. Java 21
