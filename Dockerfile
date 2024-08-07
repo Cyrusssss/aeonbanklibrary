@@ -1,6 +1,6 @@
 FROM eclipse-temurin:21-jre-alpine
 
-RUN apk add --no-cache tzdata dumb-init
+RUN apk add --no-cache tzdata dumb-init curl
 
 ENV TZ=Asia/Kuala_Lumpur
 
