@@ -1,7 +1,7 @@
 # Library System
 
 This project is a backend service to provide library functionality via Restful API as follows.
- 
+  
 
 - [Library System](#library-system)
    * [Prerequisite](#prerequisite)
