@@ -79,7 +79,7 @@ Production is hosted over Amazon Web Services, below are the information for res
 - Port: 8080
 
 ## API documentation
-
+ 
 Spring Doc Swagger documentation is available at `/swagger-ui/index.html` but with limited information due to system design, the response data information is missing.
 
 #### API HTTP Response Code
