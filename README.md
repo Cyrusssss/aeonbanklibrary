@@ -1,12 +1,14 @@
-
 # Library System
 
 This project is a backend service to provide library functionality via Restful API as follows.
 
+
 - [Library System](#library-system)
    * [Prerequisite](#prerequisite)
-   * [How to build](#how-to-build)
-   * [How to run in localhost](#how-to-run-in-localhost)
+   * [How to build & run](#how-to-build---run)
+   * [Production Server Information](#production-server-information)
+      + [AWS RDS (Mysql DB ver. 8.0)](#aws-rds--mysql-db-ver-80-)
+      + [AWS ECS (to access this project API endpoint)](#aws-ecs--to-access-this-project-api-endpoint-)
    * [API documentation](#api-documentation)
       - [API HTTP Response Code](#api-http-response-code)
       - [API Response](#api-response)
@@ -26,6 +28,7 @@ This project is a backend service to provide library functionality via Restful A
          - [4. update](#4-update-1)
          - [5. delete](#5-delete-1)
 
+
 ## Prerequisite
 
 1. Java 21
@@ -34,20 +37,46 @@ This project is a backend service to provide library functionality via Restful A
 3. Docker
    - to build docker image or run the image as container locally
 
-## How to build
+## How to build & run
 
-1. `mvn clean install -Pdev`
+Project code repo is hosted over Github and is already configured with Github Action for CI/CD to AWS for the branch `prd`, so you do not need to do any manual deployment work.
+
+As for the other branch, `dev`, below are the steps on how to build and run docker image locally as docker container. 
+
+1. Compile the java maven project 
+   - command: `mvn clean install -Pdev`
    - `-Pdev` mean build the app using profile `dev`, you may change to `prd` or any other available profiles.
-2. `docker build -t aeonbanklibrary-app .`
-   - build the project as docker image
-3. `docker save -o aeonbanklibrary-app.tar aeonbanklibrary-app:latest`
-   - now you have the docker image .tar file, which can used to do deployment, for example upload to AWS ECR.
 
-## How to run in localhost
-1. `docker rm -f aeonbanklibrary-container`
-   - this will remove existing container
-2. `docker run -d -p 8080:8080 --name aeonbanklibrary-container aeonbanklibrary-app`
-   - this will run the docker image in docker container, and exposing the port 8080.
+
+2. Build docker image
+   - command: `docker build -t aeonbanklibrary-app .`
+
+
+3. Remove existing docker container
+   - command: `docker rm -f aeonbanklibrary-container`
+
+
+4. The docker image in docker container, and port forward port 8080 to host
+   - command: `docker run -d -p 8080:8080 --name aeonbanklibrary-container aeonbanklibrary-app`
+
+
+5. (Optional) To get docker image .tar file for manually deployment purpose
+   - command: `docker save -o aeonbanklibrary-app.tar aeonbanklibrary-app:latest`
+
+
+## Production Server Information
+
+Production is hosted over Amazon Web Services, below are the information for respective part of the system.
+
+### AWS RDS (Mysql DB ver. 8.0)
+- URL: aeonbanklibrary.c9qm6semu9r3.ap-southeast-1.rds.amazonaws.com
+- Port: 3306
+- Username: cyrus
+- Password: Cyrus12345
+
+### AWS ECS (to access this project API endpoint)
+- URL: library-new-alb-1867973931.ap-southeast-1.elb.amazonaws.com
+- Port: 8080
 
 ## API documentation
 
