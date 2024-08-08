@@ -10,7 +10,7 @@
         </encoder>
     </appender>
 
-    <!-- console appender for spring profile 'develop' (with color console printing) -->
+    <!-- console appender for spring profile 'dev' (with color console printing) -->
     <springProfile name="dev">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
@@ -25,7 +25,7 @@
             <charset>utf8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/yoo-crawler-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/aeonbanklibrary-%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
