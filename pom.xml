@@ -105,7 +105,6 @@
 			<scope>test</scope>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
@@ -131,6 +130,10 @@
 							<groupId>org.mybatis.spring.boot</groupId>
 							<artifactId>mybatis-spring-boot-starter-test</artifactId>
 						</exclude>
+						<exclude>
+							<groupId>com.h2database</groupId>
+							<artifactId>h2</artifactId>
+						</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -151,7 +154,6 @@
 			<id>prd</id>
 			<properties>
 				<env>prd</env>
-				<maven.test.skip>true</maven.test.skip>
 			</properties>
 		</profile>
 	</profiles>
