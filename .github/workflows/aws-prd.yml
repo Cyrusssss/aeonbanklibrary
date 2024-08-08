@@ -53,6 +53,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Get branch name and commit ID
+      id: get-info
+      run: |
+        BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
+        COMMIT_ID=$(echo "${GITHUB_SHA}" | cut -c1-7)
+        echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+        echo "COMMIT_ID=${COMMIT_ID}" >> $GITHUB_ENV
+
     - name: Set up JDK 21
       uses: actions/setup-java@v2
       with:
@@ -67,7 +75,7 @@ jobs:
         restore-keys: ${{ runner.os }}-maven
 
     - name: Build with Maven
-      run: mvn clean install -Pprd
+      run: mvn clean install -Pprd -Dmy.branch-name=${BRANCH_NAME} -Dmy.commit-id=${COMMIT_ID}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1

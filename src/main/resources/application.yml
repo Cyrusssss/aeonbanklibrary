@@ -14,6 +14,9 @@ spring:
     deserialization:
       fail-on-unknown-properties: true
 
+my:
+  branch-name: "#"
+  commit-id: "#"
 
 logging:
   config: classpath:logback-spring.xml
