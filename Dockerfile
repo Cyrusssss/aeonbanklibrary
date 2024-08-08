@@ -1,5 +1,9 @@
 FROM eclipse-temurin:21-jre-alpine
 
+ENV BRANCH_NAME="#"
+
+ENV COMMIT_ID="#"
+
 RUN apk add --no-cache tzdata dumb-init curl
 
 ENV TZ=Asia/Kuala_Lumpur
