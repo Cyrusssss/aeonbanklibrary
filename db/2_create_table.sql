@@ -1,3 +1,6 @@
+-- If there's any update on the sql script in the `db` folder in project root directory, please update it accordingly to the `test/resources/schema.sql` for build testing purpose.
+-- Mysql script is not fully compatible to H2, please convert it before update to schema.sql
+
 use aeonbanklibrary;
 
 drop table if exists book;
