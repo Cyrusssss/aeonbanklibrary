@@ -20,6 +20,9 @@ public class StartupInitializer {
     @Autowired
     private BookRepository bookRepository;
 
+    private static final String REPLACE_BRANCH_NAME = "REPLACE_BRANCH_NAME";
+    private static final String REPLACE_COMMIT_ID = "REPLACE_COMMIT_ID";
+
     @PostConstruct
     public void init() {
         displayAppInfo();
@@ -36,7 +39,10 @@ public class StartupInitializer {
     }
 
     private void displayAppInfo(){
-        log.info("[displayAppInfo]app is running on branch:{} with commitId:{}", branchName, commitId);
+        log.info("[displayAppInfo]app is running on branch:{} with commitId:{}",
+                branchName.equals(REPLACE_BRANCH_NAME) ? "#" : branchName,
+                commitId.equals(REPLACE_COMMIT_ID) ? "#" : commitId
+        );
     }
 
 }
