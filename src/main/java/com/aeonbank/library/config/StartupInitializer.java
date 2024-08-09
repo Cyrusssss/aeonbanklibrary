@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartupInitializer {
 
-    @Value("${BRANCH_NAME}")
+    @Value("${my.branch-name}")
     private String branchName;
 
-    @Value("${COMMIT_ID}")
+    @Value("${my.commit-id}")
     private String commitId;
 
     @Autowired
